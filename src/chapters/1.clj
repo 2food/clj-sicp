@@ -256,3 +256,56 @@
   (h 3)
   (h 4)
   )
+
+;; 1.11
+
+(defn f-rec [n]
+  (if (< n 3)
+    n
+    (+ (f-rec (- n 1))
+       (* 2 (f-rec (- n 2)))
+       (* 3 (f-rec (- n 3))))))
+
+(defn f-iter [n]
+  (loop [a 0
+         b 1
+         c 2
+         count n]
+    (if (= 0 count)
+      a
+      (recur b c (+ c (* 2 b) (* 3 a)) (dec count)))))
+
+(comment
+  (time (f-rec 35))
+  (time (f-iter 35))
+  )
+
+;; 1.12
+
+(defn pascals-triangle [height]
+  (if (= height 1)
+    [[1]]
+    (let [triangle (pascals-triangle (- height 1))
+          prev (last triangle)]
+      (concat triangle
+              [(mapv + (concat [0] prev) (concat prev [0]))]))))
+
+(defn pascals-triangle-iter [height]
+  (loop [triangle []
+         height   height]
+    (if (= height 0)
+      triangle
+      (let [prev (last triangle)]
+        (recur (concat triangle
+                       [(mapv + (concat [0] prev) (concat prev [0]))])
+               (dec height))))))
+
+(comment
+  (time (pascals-triangle 60))
+  (time (pascals-triangle-iter 60))
+
+  )
+
+
+;; 1.13
+;; inductive proof bla bla (https://github.com/jlollis/sicp-solutions/blob/master/Chapter%201%20Exercises/1.13.scm)
